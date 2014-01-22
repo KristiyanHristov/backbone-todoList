@@ -1,0 +1,96 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row notebook">
+            <div id="menu" class="col-md-4" >
+                <div class="row">
+                    <div class="container">
+                        <div class="btn-group">
+                            <button class="btn btn-success dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span></button>
+                            <div class="dropdown-menu">
+                                <div class="form-group">
+                                    <label for="groupTitle">Title</label>
+                                    <input type="text" class="form-control" id="groupTitle">
+                                </div>
+                                <button id="addGroup" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus"></span> ADD GROUP</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="container">
+                        <ul id="group-list" class="list-group">
+                            <script id="group-template" type="text/template">
+                                <a href="#" class="group-link"><strong><%- title %></strong></a>
+        
+                                <div class="btn-group editTodoGroup">
+                                    <button class="btn btn-warning dropdown-toggle editGroupDrop" data-toggle="dropdown"><span class="glyphicon glyphicon-pencil"></span></button>
+                                    <div class="dropdown-menu">
+                                        <div class="form-group">
+                                            <label for="groupEditTitle">Title</label>
+                                            <input type="text" class="form-control groupEditTitle">
+                                        </div>
+                                        <button class="btn btn-warning pull-right editGroup"><span class="glyphicon glyphicon-pencil"></span> EDIT GROUP</button>
+                                    </div>
+                                </div>
+                                <button type="button" class="remove btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                            </script>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <script id="todoList-template" type="text/template">
+                <div class="row">
+                    <div class="container">
+                        <div class="title">
+                            <strong><%- title %></strong>
+                        </div>
+                        <div class="btn-group">
+                            <button id="addTodoDropdown" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <div class="form-group">
+                                    <label for="todoTitle">Title</label>
+                                    <input type="text" class="form-control" id="todoTitle">
+                                </div>
+                                <div class="form-group">
+                                    <label for="todoNotes">Notes</label>
+                                    <textarea class="form-control" id="todoNotes"></textarea>
+                                </div>
+                                <button class="btn btn-success pull-right addTodo"><span class="glyphicon glyphicon-plus"></span> ADD TODO</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="container">
+                        <ul id="todo-list" class="list-group"></ul>
+                    </div>
+                </div>
+            </script>
+            
+            <script id="main-template" type="text/template">
+                <strong><%- title %></strong>
+                <small><%- description %></small>
+                <div class="btn-group editTodoGroup">
+                    <button class="btn btn-warning dropdown-toggle editTodoDrop" data-toggle="dropdown"><span class="glyphicon glyphicon-pencil"></span></button>
+                    <div class="dropdown-menu">
+                        <div class="form-group">
+                            <label for="todoTitle">Title</label>
+                            <input type="text" class="form-control todoEditTitle">
+                        </div>
+                        <div class="form-group">
+                            <label for="todoNotes">Notes</label>
+                            <textarea class="form-control todoEditNotes"></textarea>
+                        </div>
+                        <button class="btn btn-warning pull-right editTodo"><span class="glyphicon glyphicon-pencil"></span> EDIT TODO</button>
+                    </div>
+                </div>
+                <button type="button" class="remove btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+            </script>
+        </div>
+    </div>
+{% endblock %}

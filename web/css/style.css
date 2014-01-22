@@ -1,0 +1,122 @@
+body {
+    padding: 20px;
+}
+
+.todoList,
+#menu {
+    position: relative;
+    padding: 50px 0 0;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    background: #eee;
+}
+
+#menu {
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    background: #ddd;
+}
+
+.btn-group {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}
+
+.dropdown-toggle {
+    padding: 6px 12px 10px;
+}
+
+.remove {
+    position: absolute;
+    right: 8px;
+    padding: 6px 12px 10px;
+}
+
+.editTodoGroup {
+    position: absolute;
+    right: 50px;
+    top: 10px;
+}
+
+.dropdown-menu {
+    padding: 15px 30px;
+    min-width: 400px;
+    right: 0 !important;
+    left: inherit !important;
+}
+
+.dropdown-menu label {
+    color: #777;
+}
+
+#addTodoDropdown {
+    display: none;
+}
+
+#addTodo {
+    margin-top: 5px;
+}
+
+#todo-list,
+#group-list {
+    margin-bottom: 0;
+}
+
+.todoList .title {
+    position: absolute;
+    font-size: 16px;
+    top: 14px;
+    left: 15px;
+    color: #888;
+    text-shadow: 1px 1px 0 #FFFFFF;
+    
+}
+
+#todo-list li,
+#group-list li {
+    border: none;
+    border-top: 1px solid #ddd;
+    border-collapse: collapse;
+    border-radius: 0;
+    min-height: 56px;
+}
+
+#group-list li a {
+    line-height: 37px;
+}
+
+#todo-list li:last-child,
+#group-list li:last-child {
+    border-bottom: none;
+}
+
+#group-list li:last-child {
+    border-radius: 0 0 0 5px;
+}
+
+#todo-list li strong,
+#group-list li strong {
+    float: left !important;
+    clear: left;
+    width: 100%;
+}
+
+#todo-list li small,
+#group-list li small {
+    float: left !important;
+    clear: left;
+}
+
+.list-group-item {
+    margin-bottom: 0;
+}
+
+.group-link:hover {
+    text-decoration: none;
+}
+
+.form-control:focus {
+    box-shadow: inset 0 0 5px #ccc;
+    border: 1px solid #ccc;
+}

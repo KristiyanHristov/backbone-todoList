@@ -1,0 +1,19 @@
+# Symfony directories
+vendor/*
+components/*
+*/logs/*
+*/cache/*
+web/uploads/*
+web/bundles/*
+web/assets/*
+
+# Configuration files
+.htaccess
+.gitkeep
+phpunit.xml
+
+#ide phpStorm
+.idea/*
+
+#merge backups
+*.orig
