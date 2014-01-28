@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Kompa
- * Date: 13-11-27
- * Time: 15:00
- */
 
 class Notebook implements JsonSerializable
 {

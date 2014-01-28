@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Kompa
- * Date: 13-11-29
- * Time: 18:13
- */
 
 class DataStorage extends Notebook 
 {
