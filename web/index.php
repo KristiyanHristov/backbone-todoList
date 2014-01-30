@@ -19,11 +19,21 @@ $app->before(function (Request $request) {
     }
 });
 
+// Add Doctrine
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+    'db.options' => array(
+        'driver'    => 'pdo_mysql',
+        'dbname'    => 'backbone',
+        'host'      => '127.0.0.1',
+        'user'      => 'root',
+        'password'  => '',
+        'port'      => '3306'
+    ),
+));
+
 require('../php/Todo.php');
 require('../php/Notebook.php');
-require('../php/DataStorage.php');
 
-$dataStorage = DataStorage::load();
 
 $app->get('/', function () use ($app) {
     return $app['twig']->render('home.twig');
@@ -33,45 +43,52 @@ $app->get('/', function () use ($app) {
 /* ----------------------- NotebookOperations (/notebook/notebook_id) ----------------------*/
 
 
-$app->get('/notebook', function () use ($dataStorage) {
+$app->get('/notebook', function () use ($app) {
+
+    $notebooks = $app['db']->fetchAll("SELECT id, title FROM notebooks");
     
-    $notebooks = $dataStorage->getNotebooks();
     return new Response(json_encode($notebooks), 200);
     
 });
 
-$app->post('/notebook', function (Request $request) use ($dataStorage) {
+$app->post('/notebook', function (Request $request) use ($app) {
     
     $notebook = new Notebook();
     $notebook->setTitle($request->get('title'));
-    $dataStorage->addNotebook($notebook);
-    $dataStorage->save();
+
+    $sql = "INSERT INTO notebooks (id, title) VALUES (?, ?)";
+    $app['db']->executeUpdate($sql, array($notebook->getId(), $request->get('title')));
+    
     return new Response(json_encode($notebook), 201);
     
 });
 
-$app->get('/notebook/{id}', function ($id) use ($dataStorage) {
+$app->get('/notebook/{id}', function ($id) use ($app) {
+
+    $sql = "SELECT * FROM notebooks WHERE id = ?";
+    $notebook = $app['db']->fetchAssoc($sql, array((string) $id));
     
-    $notebook = $dataStorage->getNotebook($id);
     return new Response(json_encode($notebook), 200);
     
 });
 
-$app->put('/notebook/{id}', function (Request $request, $id) use ($dataStorage) {
+$app->put('/notebook/{id}', function (Request $request, $id) use ($app) {
+
+    $sql = "UPDATE notebooks SET title = ? WHERE id = ?";
+    $notebook = $app['db']->executeUpdate($sql, array($request->get('title'),(string) $id));
     
-    $notebook = $dataStorage->getNotebook($id);
     if ($notebook && $request->get('title')) {
-        $notebook->setTitle($request->get('title'));
-        $dataStorage->save();
         return new Response("Notebook updated successfully!", 200);
     }
     return new Response("Notebook not updated!", 200);
     
 });
 
-$app->delete('/notebook/{id}', function ($id) use ($dataStorage) {
+$app->delete('/notebook/{id}', function ($id) use ($app) {
+
+    $sql = "DELETE FROM notebooks WHERE id = ?";
+    $app['db']->executeUpdate($sql, array((string) $id));
     
-    $dataStorage->deleteNotebook($id);
     return new Response("Deleted successfully!", 200);
     
 });
@@ -79,61 +96,51 @@ $app->delete('/notebook/{id}', function ($id) use ($dataStorage) {
 
 /* --------------------- TodoOperations (/todo/notebook_id/todo_id) ------------------*/
 
-$app->get('/todo/{notebookId}', function ($notebookId) use ($dataStorage) {
+$app->get('/todo/{notebookId}', function ($notebookId) use ($app) {
     
-    $notebook = $dataStorage->getNotebook($notebookId);
-    if (!$notebook) {
-        return new Response("Notebook not found!", 404);
-    }
+    $sql = "SELECT id, title, description FROM todos WHERE notebook_id = ?";
+    $notebook = $app['db']->fetchAll($sql, array($notebookId));
     
-    return new Response(json_encode($notebook->getTodos()), 200);
+    return new Response(json_encode($notebook), 200);
     
 });
 
-$app->post('/todo/{notebookId}', function (Request $request, $notebookId) use ($dataStorage) {
-
-    $notebook = $dataStorage->getNotebook($notebookId);
-    /*if (!$notebook) {
-        return new Response("Notebook not found!", 404);
-    }*/
+$app->post('/todo/{notebookId}', function (Request $request, $notebookId) use ($app) {
     
     $todo = new Todo();
     $todo->setTitle($request->get('title'));
     $todo->setDescription($request->get('description'));
-    $notebook->addTodo($todo);
-    $dataStorage->save();
+
+    $sql = "INSERT INTO todos (id, title, description, notebook_id) VALUES (?, ?, ?, ?)";
+    $app['db']->executeUpdate($sql, array($todo->getId(), $request->get('title'), $request->get('description'), $notebookId));
+    
     return new Response(json_encode($todo), 201);
     
 });
 
-$app->get('/todo/{notebookId}/{todoId}', function ($notebookId, $todoId) use ($dataStorage) {
+$app->get('/todo/{notebookId}/{todoId}', function ($notebookId, $todoId) use ($app) {
     
-    $notebook = $dataStorage->getNotebook($notebookId);
-    $todo = $notebook->getTodo($todoId);
-    return new Response(json_encode($todo), 200);
+    $sql = "SELECT id, title, description FROM todos WHERE notebook_id = ? AND id = ?";
+    $notebook = $app['db']->fetchAssoc($sql, array($notebookId, $todoId));
+    
+    return new Response(json_encode($notebook), 200);
     
 });
 
-$app->put('/todo/{notebookId}/{todoId}', function (Request $request, $notebookId, $todoId) use ($dataStorage) {
-    
-    $notebook = $dataStorage->getNotebook($notebookId);
-    if (!$notebook) {
-        return new Response("Todo not updated!", 404);
-    }
+$app->put('/todo/{notebookId}/{todoId}', function (Request $request, $notebookId, $todoId) use ($app) {
 
-    $todo = $notebook->getTodo($todoId);
-    $todo->setTitle($request->get('title'));
-    $todo->setDescription($request->get('description'));
-    $dataStorage->save();
+    $sql = "UPDATE todos SET title = ?, description = ? WHERE notebook_id = ? AND id = ?";
+    $app['db']->executeUpdate($sql, array($request->get('title'), $request->get('description'), $notebookId, $todoId));
+    
     return new Response("Todo updated successfully!", 200);
     
 });
 
-$app->delete('/todo/{notebookId}/{todoId}', function ($notebookId, $todoId) use ($dataStorage) {
+$app->delete('/todo/{notebookId}/{todoId}', function ($todoId) use ($app) {
+
+    $sql = "DELETE FROM todos WHERE id = ?";
+    $app['db']->executeUpdate($sql, array($todoId));
     
-    $notebook = $dataStorage->getNotebook($notebookId);
-    $notebook->deleteTodo($todoId);
-    $dataStorage->save();
     return new Response("Deleted successfully!", 200);
     
 });
