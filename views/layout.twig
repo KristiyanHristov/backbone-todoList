@@ -2,30 +2,33 @@
 <head>
     <meta charset="utf-8">
     <title>Backbone TodoList Project</title>
-    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-    <link href="/css/style.css" rel="stylesheet" type="text/css"/>
+    
+    {% stylesheets '../web/css/*.css' filter='?yui_css' output='assets/css/all_v2.css' %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+    {% endstylesheets %}
 </head>
 <body>
 
 {% block content %}{% endblock %}
 
-<script src="/js/jquery.js"></script>
-<script src="/js/underscore.js"></script>
-<script src="/js/backbone.js"></script>
-<script src="/js/bootstrap.js"></script>
-
-<script src="/js/models/todo.js" type="text/javascript"></script>
-<script src="/js/collections/todoCollection.js" type="text/javascript"></script>
-<script src="/js/views/todoView.js" type="text/javascript"></script>
-<script src="/js/views/todoListView.js" type="text/javascript"></script>
-<script src="/js/views/todoListApp.js" type="text/javascript"></script>
-
-<script src="/js/models/group.js" type="text/javascript"></script>
-<script src="/js/collections/groupCollection.js" type="text/javascript"></script>
-<script src="/js/views/groupView.js" type="text/javascript"></script>
-<script src="/js/views/groupApplication.js" type="text/javascript"></script>
-
-<script src="/js/main.js" type="text/javascript"></script>
+{% javascripts filter='?yui_js' output='assets/js/all_v2.js'
+    '../web/js/jquery.js'
+    '../web/js/underscore.js'
+    '../web/js/backbone.js'
+    '../web/js/bootstrap.js'
+    '../web/js/models/todo.js'
+    '../web/js/collections/todoCollection.js'
+    '../web/js/views/todoView.js'
+    '../web/js/views/todoListView.js'
+    '../web/js/views/todoListApp.js'
+    '../web/js/models/group.js'
+    '../web/js/collections/groupCollection.js'
+    '../web/js/views/groupView.js'
+    '../web/js/views/groupApplication.js'
+    '../web/js/main.js'
+%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
 
 </body>
 </html>

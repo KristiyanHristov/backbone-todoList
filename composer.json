@@ -4,6 +4,8 @@
 		"twig/twig": ">=1.8,<2.0-dev",
 		"jlong/sass-twitter-bootstrap": "3.0.0",
 		"components/backbone": "1.1.0",
-		"components/jquery": "2.0.3"
+		"components/jquery": "2.0.3",
+        "mheap/Silex-Assetic": "*",
+        "symfony/console": "2.5.*@dev"
     }
 }
